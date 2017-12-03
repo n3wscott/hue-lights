@@ -1,0 +1,5 @@
+package: github.com/n3wscott/hue-lights
+import:
+- package: github.com/gorilla/mux
+  version: ^1.6.0
+- package: github.com/golang/glog
