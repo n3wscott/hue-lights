@@ -4,35 +4,32 @@ import (
 	"encoding/json"
 
 	"github.com/golang/glog"
+	"github.com/n3wscott/hue-lights/pkg/apis/hue/v1"
 )
 
 func (h *Hue) FindLights() {
 	glog.Info("Finding Lights")
 
-	for i := range h.Groups {
-		h.findLightsForGroup(&h.Groups[i])
-		glog.Info(h.Groups[i])
+	body, err := h.get("/api/{username}/lights")
+	if err != nil {
+		// handle error...
+		glog.Error("Finding lights returned error: ", err)
+		return
 	}
+	var lights v1.Lights
+	json.Unmarshal(body, &lights)
+
+	h.Lights = &lights
 }
 
-func (h *Hue) findLightsForGroup(group *Group) {
-	for _, lightId := range group.LightIds {
-		light, err := h.findLight(lightId)
-		if err != nil {
-			return
-		}
-		group.Lights = append(group.Lights, *light)
-	}
-}
-
-func (h *Hue) findLight(lightId string) (*Light, error) {
+func (h *Hue) findLight(lightId string) (*v1.Light, error) {
 	body, err := h.get("/api/{username}/lights/" + lightId)
 	if err != nil {
 		// handle error...
 		glog.Error("Finding light "+lightId+" returned error: ", err)
 		return nil, err
 	}
-	var light Light
+	var light v1.Light
 	json.Unmarshal(body, &light)
 
 	glog.Info("Light: ", light)

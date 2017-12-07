@@ -3,9 +3,8 @@ package hue
 import (
 	"encoding/json"
 
-	"fmt"
-
 	"github.com/golang/glog"
+	"github.com/n3wscott/hue-lights/pkg/apis/hue/v1"
 )
 
 func (h *Hue) FindGroups() {
@@ -17,23 +16,20 @@ func (h *Hue) FindGroups() {
 		glog.Error("Finding group returned error: ", err)
 	}
 
-	var groups map[string]Group
+	var groups v1.Groups
 
 	json.Unmarshal(body, &groups)
 
 	glog.Info("Groups: ", groups)
 
-	h.Groups = make([]Group, len(groups))
+	//i := 0
+	//for k, v := range groups {
+	//	fmt.Printf("key[%s] value[%s]\n", k, v)
+	//	h.Groups[i] = v
+	//	i++
+	//}
 
-	i := 0
-	for k, v := range groups {
-		fmt.Printf("key[%s] value[%s]\n", k, v)
-		v.Lights = make([]Light, 0)
-		h.Groups[i] = v
-		i++
-	}
-
-	h.Catalog = &Catalog{Groups: h.Groups}
+	h.Groups = &groups
 
 	h.FindLights()
 }

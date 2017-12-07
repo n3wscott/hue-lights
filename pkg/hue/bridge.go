@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/golang/glog"
+	"github.com/n3wscott/hue-lights/pkg/apis/hue/v1"
 )
 
 func (h *Hue) FindBridge() {
@@ -20,13 +21,13 @@ func (h *Hue) FindBridge() {
 	body, err := ioutil.ReadAll(resp.Body)
 	glog.Info("Bridge: ", string(body))
 
-	nunups := []Nunup{}
+	nunups := []v1.Nunup{}
 	json.Unmarshal([]byte(body), &nunups)
 	glog.Info("Obj: ", nunups)
 
 	if len(nunups) > 0 {
-		h.Bridge.Nunup = &nunups[0]
+		h.Bridge = &nunups[0]
 	} else {
-		h.Bridge.Nunup = &Nunup{Id: "mock", InternalIPAddress: "localhost:5000"}
+		h.Bridge = &v1.Nunup{Id: "mock", InternalIPAddress: "localhost:5000"}
 	}
 }

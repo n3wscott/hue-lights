@@ -12,7 +12,7 @@ import (
 func (h *Hue) get(url string) ([]byte, error) {
 
 	if strings.HasPrefix(url, "/") {
-		url = h.Bridge.Nunup.InternalIPAddress + url
+		url = h.Bridge.InternalIPAddress + url
 	}
 
 	if !strings.Contains(url, "http://") {
