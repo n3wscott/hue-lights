@@ -62,6 +62,20 @@ func (s *server) GetBridge(w http.ResponseWriter, req *http.Request) {
 	json.NewEncoder(w).Encode(people)
 }
 
+func (s *server) GetUser(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	people, _ := s.Controller.GetUser()
+	json.NewEncoder(w).Encode(people)
+}
+
+func (s *server) GetCatalog(w http.ResponseWriter, req *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+
+	people, _ := s.Controller.GetCatalog()
+	json.NewEncoder(w).Encode(people)
+}
+
 type server struct {
 	Router     *mux.Router
 	Controller v1.Controller
@@ -89,6 +103,8 @@ func CreateServer() *server {
 	s.Router.HandleFunc("/people/{id}", s.DeletePerson).Methods("DELETE")
 
 	s.Router.HandleFunc("/bridge", s.GetBridge).Methods("GET")
+	s.Router.HandleFunc("/user", s.GetUser).Methods("GET")
+	s.Router.HandleFunc("/catalog", s.GetCatalog).Methods("GET")
 
 	return &s
 }

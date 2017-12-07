@@ -19,6 +19,23 @@ func (pc *PeopleController) GetBridge() (*hue.Bridge, error) {
 	return pc.Hue.Bridge, nil
 }
 
+func (pc *PeopleController) GetUser() (*hue.User, error) {
+
+	pc.Hue.FindBridge()
+	pc.Hue.FindUser()
+
+	return pc.Hue.User, nil
+}
+
+func (pc *PeopleController) GetCatalog() (*hue.Catalog, error) {
+
+	pc.Hue.FindBridge()
+	pc.Hue.FindUser()
+	pc.Hue.FindGroups()
+
+	return pc.Hue.Catalog, nil
+}
+
 func (pc *PeopleController) GetPeople() ([]v1.Person, error) {
 	return pc.People, nil
 }

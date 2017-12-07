@@ -14,14 +14,19 @@ func (h *Hue) FindBridge() {
 	resp, err := http.Get("https://www.meethue.com/api/nupnp")
 	if err != nil {
 		// handle error
+		glog.Error(err)
 	}
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	glog.Info("Bridge: ", string(body))
 
-	nunups := make([]Nunup, 0)
+	nunups := []Nunup{}
 	json.Unmarshal([]byte(body), &nunups)
 	glog.Info("Obj: ", nunups)
 
-	h.Bridge.Nunup = &nunups[0] // TODO check if there is one.
+	if len(nunups) > 0 {
+		h.Bridge.Nunup = &nunups[0]
+	} else {
+		h.Bridge.Nunup = &Nunup{Id: "mock", InternalIPAddress: "localhost:5000"}
+	}
 }

@@ -10,4 +10,7 @@ type Controller interface {
 	DeletePerson(id string) error
 
 	GetBridge() (*hue.Bridge, error)
+	GetUser() (*hue.User, error)
+
+	GetCatalog() (*hue.Catalog, error)
 }
